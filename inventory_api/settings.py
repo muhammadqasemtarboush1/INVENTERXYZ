@@ -56,7 +56,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'inventory_api.urls'
+ROOT_URLCONF = 'inventory_api.urls.py'
 
 TEMPLATES = [
     {
