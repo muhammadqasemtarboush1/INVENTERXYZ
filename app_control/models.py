@@ -13,6 +13,9 @@ class InventoryGroup(models.Model):
         'self', null=True, on_delete=models.SET_NULL, related_name="group_relations"
     )
 
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
     class Meta:
         ordering = ("-created_at",)
 
@@ -56,7 +59,7 @@ class Inventory(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ("-created_at",)
+        ordering = ('-created_at',)
 
     def save(self, *args, **kwargs):
         is_new = self.pk is None
