@@ -40,9 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    #9/10/2022 adding the new apps
+    # New apps
     'rest_framework',
-    'user_control'
+    'user_control',
+    'app_control',
 ]
 
 MIDDLEWARE = [
