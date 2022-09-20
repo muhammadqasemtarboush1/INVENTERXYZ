@@ -1,22 +1,15 @@
 from rest_framework.viewsets import ModelViewSet
 from .serializers import (
-    Inventory,
-    InventoryGroup,
-    InventorySerializer,
-    InventoryGroupSerializer,
-    Shop,
-    Invoice,
-    ShopSerializer,
-    InvoiceSerializer,
-    InventoryWithSumSerializer,
-    ShopWithAmountSerializer,
-    InvoiceItem,
+    Inventory, InventorySerializer, InventoryGroupSerializer, InventoryGroup,
+    Shop, ShopSerializer, Invoice, InvoiceSerializer, InventoryWithSumSerializer,
+    ShopWithAmountSerializer, InvoiceItem
 )
 from rest_framework.response import Response
 from inventory_api.custom_methods import IsAuthenticatedCustom
 from inventory_api.utils import CustomPagination, get_query
 from django.db.models import Count, Sum, F
 from django.db.models.functions import Coalesce, TruncMonth
+from user_control.views import add_user_activity
 from user_control.models import CustomUser
 import csv
 import codecs
@@ -71,8 +64,9 @@ class InventoryGroupView(ModelViewSet):
         results = self.queryset.filter(**data)
 
         if keyword:
-            search_fields = ("created_by__fullname", "created_by__email", "name")
-
+            search_fields = (
+                "created_by__fullname", "created_by__email", "name"
+            )
             query = get_query(keyword, search_fields)
             results = results.filter(query)
 
@@ -102,7 +96,9 @@ class ShopView(ModelViewSet):
         results = self.queryset.filter(**data)
 
         if keyword:
-            search_fields = ("created_by__fullname", "created_by__email", "name")
+            search_fields = (
+                "created_by__fullname", "created_by__email", "name"
+            )
             query = get_query(keyword, search_fields)
             results = results.filter(query)
 
@@ -114,7 +110,8 @@ class ShopView(ModelViewSet):
 
 
 class InvoiceView(ModelViewSet):
-    queryset = Invoice.objects.select_related("created_by", "shop").prefetch_related("invoice_items")
+    queryset = Invoice.objects.select_related(
+        "created_by", "shop").prefetch_related("invoice_items")
     serializer_class = InvoiceSerializer
     permission_classes = (IsAuthenticatedCustom,)
     pagination_class = CustomPagination
@@ -299,3 +296,4 @@ class InventoryCSVLoaderView(ModelViewSet):
         data_validation.save()
 
         return Response({"success": "Inventory items added successfully"})
+

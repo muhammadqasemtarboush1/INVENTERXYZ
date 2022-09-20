@@ -1,3 +1,4 @@
+from django.db import models
 from .models import Inventory, InventoryGroup, Shop, Invoice, InvoiceItem
 from user_control.serializers import CustomUserSerializer
 from rest_framework import serializers
@@ -98,3 +99,5 @@ class InvoiceSerializer(serializers.ModelSerializer):
             raise Exception(invoice_item_serializer.errors)
 
         return invoice
+
+

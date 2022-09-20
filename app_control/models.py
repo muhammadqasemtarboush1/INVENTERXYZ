@@ -5,14 +5,13 @@ from user_control.views import add_user_activity
 
 class InventoryGroup(models.Model):
     created_by = models.ForeignKey(
-        CustomUser, null=True, related_name="inventory_groups", on_delete=models.SET_NULL
+        CustomUser, null=True, related_name="inventory_groups",
+        on_delete=models.SET_NULL
     )
-
     name = models.CharField(max_length=100, unique=True)
     belongs_to = models.ForeignKey(
         'self', null=True, on_delete=models.SET_NULL, related_name="group_relations"
     )
-
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -50,7 +49,6 @@ class Inventory(models.Model):
     group = models.ForeignKey(
         InventoryGroup, related_name="inventories", null=True, on_delete=models.SET_NULL
     )
-
     total = models.PositiveIntegerField()
     remaining = models.PositiveIntegerField(null=True)
     name = models.CharField(max_length=255)
@@ -59,7 +57,7 @@ class Inventory(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ('-created_at',)
+        ordering = ("-created_at",)
 
     def save(self, *args, **kwargs):
         is_new = self.pk is None
@@ -112,7 +110,7 @@ class Shop(models.Model):
     def save(self, *args, **kwargs):
         action = f"added new shop - '{self.name}'"
         if self.pk is not None:
-            action = f"updated shop[] from - '{self.old_name}' to '{self.name}'"
+            action = f"updated shp[] from - '{self.old_name}' to '{self.name}'"
         super().save(*args, **kwargs)
         add_user_activity(self.created_by, action=action)
 
@@ -131,17 +129,12 @@ class Invoice(models.Model):
         CustomUser, null=True, related_name="invoices",
         on_delete=models.SET_NULL
     )
-    shop = models.ForeignKey(Shop, related_name="sale_shop", null=True, on_delete=models.SET_NULL)
+    shop = models.ForeignKey(
+        Shop, related_name="sale_shop", null=True, on_delete=models.SET_NULL)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ("-created_at",)
-
-    def save(self, *args, **kwargs):
-        created_by = self.created_by
-        action = f"deleted invoice - '{self.id}'"
-        super().delete(*args, **kwargs)
-        add_user_activity(created_by, action=action)
 
     def delete(self, *args, **kwargs):
         created_by = self.created_by
